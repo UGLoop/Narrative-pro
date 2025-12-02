@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Narrative Pro — OAuth Callback</title>
+<style>
+ body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto;background:#f8fafc}
+ .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+ .card{max-width:820px;width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:24px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+ pre{background:#f3f4f6;padding:12px;border-radius:10px;white-space:pre-wrap;word-break:break-all}
+</style></head>
+<body>
+  <div class="wrap"><div class="card">
+    <h1>🔐 OAuth Callback Reached</h1>
+    <p>This page echoes query parameters to confirm the redirect works.</p>
+    <pre id="out">Loading…</pre>
+    <script>
+      const p = new URLSearchParams(location.search); const obj={}; p.forEach((v,k)=>obj[k]=v);
+      document.getElementById('out').textContent = JSON.stringify(obj,null,2);
+      try{ if(window.parent && window.parent!==window){ window.parent.postMessage({type:"oauth_callback_params",params:obj},"*"); } }catch(e){}
+    </script>
+  </div></div>
+</body></html>
