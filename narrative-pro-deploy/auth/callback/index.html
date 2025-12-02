@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Narrative Pro — OAuth Callback</title>
+  <meta name="robots" content="noindex">
+  <style>
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell; background:#fafafa; }
+    .wrap { min-height: 100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+    .card { max-width: 800px; width:100%; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,.06); }
+    h1 { margin: 0 0 10px; font-size: 22px; }
+    .kv { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; background:#f3f4f6; border-radius:10px; padding:12px; }
+    .hint { color:#6b7280; font-size:12px; margin-top:12px; }
+    .ok { display:inline-block; background:#3b82f6; color:#fff; padding:6px 10px; border-radius:8px; font-weight:600; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>🔐 OAuth Callback Reached</h1>
+      <p>This endpoint simply echoes query parameters so you can verify the redirect works during app setup.</p>
+      <div id="params" class="kv">Loading…</div>
+      <p class="hint">A developer will later replace this static page with a server handler that exchanges the <code>code</code> for tokens and then redirects back to your embedded UI.</p>
+      <span class="ok">Callback OK</span>
+    </div>
+  </div>
+  <script>
+    (function(){
+      const out = document.getElementById('params');
+      const p = new URLSearchParams(location.search);
+      const all = {};
+      p.forEach((v,k)=> all[k]=v);
+      out.textContent = JSON.stringify(all, null, 2);
+
+      // If embedded, also postMessage upward (optional helper for debugging)
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: "oauth_callback_params", params: all }, "*");
+        }
+      } catch(e){}
+    })();
+  </script>
+</body>
+</html>
